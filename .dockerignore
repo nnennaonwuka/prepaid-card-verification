@@ -1,0 +1,10 @@
+.env
+/node_modules
+.env*.local
+Dockerfile
+docker-compose.yaml
+ingress.yaml
+package-lock.json
+.github
+.next
+.env.example

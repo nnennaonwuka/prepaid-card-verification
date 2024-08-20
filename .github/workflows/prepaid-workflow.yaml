@@ -1,0 +1,75 @@
+# name: Deploy to Cloud Run
+
+# on:
+#   push:
+#     branches:
+
+# jobs:
+#   build-and-deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v3
+
+#     - name: Authenticate to Google Cloud
+#       id: gcp-auth
+#       uses: google-github-actions/auth@v1
+#       with:
+#         credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+
+#     - name: Decode GCR JSON key
+#       run:  echo ${{ secrets.GCP_SA_KEY }} | base64 --decode > gcr-key.json
+
+#     - name: Authenticate Docker with GCR
+#       run: |
+#         echo ${{ secrets.GCP_SA_KEY }} | base64 --decode > gcr-key.json 
+#         cat gcr-key.json | docker login -u _json_key --password-stdin https://gcr.io
+
+#     - name: Build Docker image
+#       run: |
+#         docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID_DEV }}/prepaid-card-portal-frontend:$GITHUB_SHA .
+#         # docker push gcr.io/${{ secrets.GCP_PROJECT_ID_DEV }}/prepaid-card-portal-frontend:$GITHUB_SHA
+
+#     - name: Push Docker image to GCR
+#       run: |
+#         docker push gcr.io/${{ secrets.GCP_PROJECT_ID_DEV }}/prepaid-card-portal-frontend:$GITHUB_SHA
+
+#     - name: Deploy to Cloud Run
+#       run: |
+#         gcloud run deploy prepaid-card-verification \
+#           --image gcr.io/${{ secrets.GCP_PROJECT_ID_DEV }}/prepaid-card-portal-frontend:$GITHUB_SHA \
+#           --region ${{ secrets.GCP_REGION }} \
+#           --platform managed \
+#           --allow-unauthenticated
+
+#     - name: Describe Run Service on Cloud Run
+#       run: gcloud run services describe prepaid-card-verification --region europe-west3 --format yaml  > service_description.json
+
+
+#     - name: Debug service_description.json
+#       run: |
+#         echo "SHA_VALUE : $GITHUB_SHA"
+#         echo "Content of service_description.json:"
+#         cat service_description.json
+
+    # - name: Check for hidden characters
+    #   run: |
+    #     echo "Octal dump of service_description.json:"
+    #     od -c service_description.json
+
+    # - name: Pretty-print JSON
+    #   run: |
+    #     cat service_description.json | jq .
+
+    # - name: Extract container details
+    #   run: |
+    #     echo "SHA_VALUE : $GITHUB_SHA"
+    #     latestCreatedRevisionName=$(cat service_description.json | jq -r '.status.latestCreatedRevisionName')
+    #     image=$(cat service_description.json | jq -r '.spec.template.spec.containers[].image')
+    #     echo "Latest Created Revision Name: $latestCreatedRevisionName"
+    #     echo "Container Image: $image"
+
+
+

@@ -1,0 +1,10 @@
+version: '3'
+services:
+  prepaid-card-verification-portal:
+    # image: gcr.io/babbangona-dev/prepaid-card-portal-frontend:ba0ced47d268f408dce28ea3c19cea45081f2add
+    build: .
+    ports:
+      - "3000:3000"
+    # env_file:
+    #   - .env
+      # - .env.production.local
